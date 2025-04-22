@@ -164,13 +164,13 @@
             </div>
             
             <div class="question">
-                <p>2. Have you completed the LinkedIn Learning AI fundamentals course?</p>
+                <p>2. Have you completed the LinkedIn Learning CoPilot at Skills?</p>
                 <label><input type="radio" name="completedLinkedIn" value="yes" required> Yes</label>
                 <label><input type="radio" name="completedLinkedIn" value="no"> No</label>
             </div>
             
             <div class="question">
-                <p>3. Have you completed the Prompt Engineering workshop with Andy?</p>
+                <p>3. Have you completed the Prompt Engineering workshop with Andy Cooper?</p>
                 <label><input type="radio" name="completedPromptTraining" value="yes" required> Yes</label>
                 <label><input type="radio" name="completedPromptTraining" value="no"> No</label>
             </div>
@@ -209,7 +209,7 @@
         <h2>Assessment Result</h2>
         <h3>You're ready to apply for a paid AI tool!</h3>
         <p>Based on your responses, you meet the criteria for accessing a paid AI tool. Proceed to the application form to request access.</p>
-        <a href="https://forms.office.com/r/ZW4eTrjP4s" target="_blank" class="action-link">Proceed to Application Form</a>
+        <a href="https://forms.office.com/r/HWfv4HzBtz" target="_blank" class="action-link">Proceed to Business Justification Form</a>
         <button onclick="resetAssessment()" class="reset-btn">Take Assessment Again</button>
     </div>
     
@@ -294,7 +294,7 @@
             else missingRequirements.push("Experience with free AI tools");
             
             if (formData.get('completedLinkedIn') === 'yes') readinessScore += 1;
-            else missingRequirements.push("LinkedIn Learning AI fundamentals course");
+            else missingRequirements.push("LinkedIn Learning CoPilot at Skills");
             
             if (formData.get('completedPromptTraining') === 'yes') readinessScore += 2;
             else missingRequirements.push("Prompt Engineering workshop");
@@ -344,24 +344,24 @@
             });
             
             // Add next steps based on missing requirements
-            if (missingItems.includes("LinkedIn Learning AI fundamentals course")) {
+            if (missingItems.includes("LinkedIn Learning CoPilot at Skills")) {
                 const step = document.createElement('p');
                 step.className = 'next-step';
-                step.innerHTML = '• Complete the <a href="https://www.linkedin.com/learning/paths/ai-in-your-organization-fundamentals" target="_blank">LinkedIn Learning AI fundamentals course</a>';
+                step.innerHTML = '• Complete the LinkedIn Learning CoPilot at Skills (access from the AI Hub: <a href="https://skillsorg.sharepoint.com/SitePages/Digital-Literacy-at-Skills.aspx" target="_blank">https://skillsorg.sharepoint.com/SitePages/Digital-Literacy-at-Skills.aspx</a>)';
                 stepsList.appendChild(step);
             }
             
             if (missingItems.includes("Prompt Engineering workshop")) {
                 const step = document.createElement('p');
                 step.className = 'next-step';
-                step.textContent = '• Sign up for the next Prompt Engineering workshop with Andy Cooper';
+                step.innerHTML = '• Prompt Engineering workshop with Andy Cooper (access from the AI Hub: <a href="https://skillsorg.sharepoint.com/SitePages/Digital-Literacy-at-Skills.aspx" target="_blank">https://skillsorg.sharepoint.com/SitePages/Digital-Literacy-at-Skills.aspx</a>)';
                 stepsList.appendChild(step);
             }
             
             if (missingItems.includes("Skills Group AI Policy training")) {
                 const step = document.createElement('p');
                 step.className = 'next-step';
-                step.textContent = '• Complete the Skills Group AI Policy training';
+                step.innerHTML = '• Complete the Skills Group AI Policy training (<a href="https://skillsgrouplms.scgnz.org/course/view.php?id=236" target="_blank">https://skillsgrouplms.scgnz.org/course/view.php?id=236</a>)';
                 stepsList.appendChild(step);
             }
             
