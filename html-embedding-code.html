@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tool Readiness Check - Skills Group</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include React and ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Include Babel for JSX support -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        /* Add any custom styles here */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header-logo {
+            max-height: 60px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="mb-8">
+            <img src="https://your-skills-group-logo-url.png" alt="Skills Group Logo" class="header-logo">
+            <h1 class="text-3xl font-bold text-blue-900">AI Tools Access Portal</h1>
+            <p class="text-gray-600">Determine if you're ready to apply for a paid AI tool license</p>
+        </header>
+
+        <!-- The React app will be mounted here -->
+        <div id="ai-readiness-app"></div>
+
+        <footer class="mt-10 pt-6 border-t border-gray-200 text-gray-600 text-sm">
+            <p>© 2025 Skills Group. For questions about AI tool access, contact <a href="mailto:andy.cooper@skillsgroup.com" class="text-blue-600 hover:underline">andy.cooper@skillsgroup.com</a></p>
+        </footer>
+    </div>
+
+    <!-- React component script -->
+    <script type="text/babel">
+        // AI Readiness Pre-Assessment Component
+        function AIReadinessPreAssessment() {
+            const [currentQuestion, setCurrentQuestion] = React.useState(0);
+            const [answers, setAnswers] = React.useState({
+                usedFreeVersion: null,
+                completedLinkedIn: null,
+                completedPromptTraining: null,
+                completedPolicyTraining: null,
+                hasUseCase: null,
+                willingToShare: null,
+                useFrequency: null
+            });
+            const [result, setResult] = React.useState(null);
+            const [showDetails, setShowDetails] = React.useState(false);
+
+            const questions = [
+                {
+                    id: 'usedFreeVersion',
+                    text: 'Have you used the free version of ChatGPT, Claude, or Copilot?',
+                    options: [
+                        { value: true, label: 'Yes' },
+                        { value: false, label: 'No' }
+                    ]
+                },
+                {
+                    id: 'completedLinkedIn',
+                    text: 'Have you completed the LinkedIn Learning AI fundamentals course?',
+                    options: [
+                        { value: true, label: 'Yes' },
+                        { value: false, label: 'No' }
+                    ]
+                },
+                {
+                    id: 'completedPromptTraining',
+                    text: 'Have you completed the Prompt Engineering workshop with Andy?',
+                    options: [
+                        { value: true, label: 'Yes' },
+                        { value: false, label: 'No' }
+                    ]
+                },
+                {
+                    id: 'completedPolicyTraining',
+                    text: 'Have you completed the Skills Group AI Policy training?',
+                    options: [
+                        { value: true, label: 'Yes' },
+                        { value: false, label: 'No' }
+                    ]
+                },
+                {
+                    id: 'hasUseCase',
+                    text: 'Do you have specific tasks or projects where you plan to use a paid AI tool?',
+                    options: [
+                        { value: true, label: 'Yes, I have clear use cases' },
+                        { value: false, label: 'No, I\'m just curious about the technology' }
+                    ]
+                },
+                {
+                    id: 'willingToShare',
+                    text: 'Are you willing to share your learnings and experiences with the AI Acceleration Team?',
+                    options: [
+                        { value: true, label: 'Yes' },
+                        { value: false, label: 'No' }
+                    ]
+                },
+                {
+                    id: 'useFrequency',
+                    text: 'How often do you anticipate using the paid AI tool?',
+                    options: [
+                        { value: 'daily', label: 'Daily' },
+                        { value: 'weekly', label: 'Several times a week' },
+                        { value: 'occasionally', label: 'Occasionally' },
+                        { value: 'rarely', label: 'Rarely' }
+                    ]
+                }
+            ];
+
+            const handleAnswer = (value) => {
+                setAnswers({
+                    ...answers,
+                    [questions[currentQuestion].id]: value
+                });
+
+                if (currentQuestion < questions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    evaluateReadiness();
+                }
+            };
+
+            const evaluateReadiness = () => {
+                // Count how many key criteria are met
+                let readinessScore = 0;
+                let missingRequirements = [];
+
+                // Core requirements
+                if (answers.usedFreeVersion) readinessScore += 1;
+                else missingRequirements.push("Experience with free AI tools");
+
+                if (answers.completedLinkedIn) readinessScore += 1;
+                else missingRequirements.push("LinkedIn Learning AI fundamentals course");
+
+                if (answers.completedPromptTraining) readinessScore += 2; // Higher weight for prompt training
+                else missingRequirements.push("Prompt Engineering workshop");
+
+                if (answers.completedPolicyTraining) readinessScore += 1;
+                else missingRequirements.push("Skills Group AI Policy training");
+
+                if (answers.hasUseCase) readinessScore += 2; // Higher weight for having clear use cases
+                else missingRequirements.push("Clear use cases for the tool");
+
+                if (answers.willingToShare) readinessScore += 1;
+                else missingRequirements.push("Willingness to share learnings");
+
+                if (answers.useFrequency === 'daily' || answers.useFrequency === 'weekly') readinessScore += 1;
+                else missingRequirements.push("Regular usage plan");
+
+                // Determine readiness level
+                if (readinessScore >= 7) {
+                    setResult({
+                        status: 'ready',
+                        score: readinessScore,
+                        message: "You're ready to apply for a paid AI tool!",
+                        description: "Based on your responses, you meet the criteria for accessing a paid AI tool. Proceed to the application form to request access.",
+                        missingRequirements: []
+                    });
+                } else if (readinessScore >= 4) {
+                    setResult({
+                        status: 'almost',
+                        score: readinessScore,
+                        message: "You're almost ready!",
+                        description: "You've made good progress, but there are a few areas to address before applying for a paid AI tool.",
+                        missingRequirements: missingRequirements
+                    });
+                } else {
+                    setResult({
+                        status: 'notReady',
+                        score: readinessScore,
+                        message: "More preparation needed",
+                        description: "We recommend completing some additional preparation before applying for a paid AI tool.",
+                        missingRequirements: missingRequirements
+                    });
+                }
+            };
+
+            const resetAssessment = () => {
+                setCurrentQuestion(0);
+                setAnswers({
+                    usedFreeVersion: null,
+                    completedLinkedIn: null,
+                    completedPromptTraining: null,
+                    completedPolicyTraining: null,
+                    hasUseCase: null,
+                    willingToShare: null,
+                    useFrequency: null
+                });
+                setResult(null);
+                setShowDetails(false);
+            };
+
+            const renderQuestion = () => {
+                const question = questions[currentQuestion];
+                return (
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-medium text-blue-900">
+                            Question {currentQuestion + 1} of {questions.length}
+                        </h3>
+                        <p className="text-gray-700">{question.text}</p>
+                        <div className="space-y-2">
+                            {question.options.map((option) => (
+                                <button
+                                    key={option.label}
+                                    onClick={() => handleAnswer(option.value)}
+                                    className="w-full p-3 text-left border rounded-md hover:bg-blue-50 transition-colors"
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                );
+            };
+
+            const renderResult = () => {
+                const getStatusColor = () => {
+                    switch (result.status) {
+                        case 'ready': return 'bg-green-100 text-green-800 border-green-200';
+                        case 'almost': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                        case 'notReady': return 'bg-red-100 text-red-800 border-red-200';
+                        default: return 'bg-blue-100 text-blue-800 border-blue-200';
+                    }
+                };
+
+                return (
+                    <div className="space-y-6">
+                        <div className={`p-6 rounded-lg border ${getStatusColor()}`}>
+                            <h3 className="text-xl font-bold mb-2">{result.message}</h3>
+                            <p className="mb-4">{result.description}</p>
+                            
+                            {result.status === 'ready' ? (
+                                <div className="mt-4">
+                                    <a 
+                                        href="https://forms.office.com/r/ZW4eTrjP4s" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                                    >
+                                        Proceed to Application Form
+                                    </a>
+                                </div>
+                            ) : (
+                                <>
+                                    <button 
+                                        onClick={() => setShowDetails(!showDetails)}
+                                        className="text-blue-600 underline mb-2"
+                                    >
+                                        {showDetails ? 'Hide details' : 'Show what you need to complete'}
+                                    </button>
+                                    
+                                    {showDetails && result.missingRequirements.length > 0 && (
+                                        <div className="mt-2">
+                                            <h4 className="font-medium mb-1">Areas to address:</h4>
+                                            <ul className="list-disc pl-5 space-y-1">
+                                                {result.missingRequirements.map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
+                                            </ul>
+                                            
+                                            <div className="mt-4 space-y-2">
+                                                <h4 className="font-medium">Next steps:</h4>
+                                                <div className="space-y-2">
+                                                    {!answers.completedLinkedIn && (
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 h-5 w-5 text-blue-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                            <p className="ml-2">Complete the <a href="https://www.linkedin.com/learning/paths/ai-in-your-organization-fundamentals" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">LinkedIn Learning AI fundamentals course</a></p>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {!answers.completedPromptTraining && (
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 h-5 w-5 text-blue-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                            <p className="ml-2">Sign up for the next Prompt Engineering workshop with Andy Cooper</p>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {!answers.completedPolicyTraining && (
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 h-5 w-5 text-blue-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                            <p className="ml-2">Complete the Skills Group AI Policy training</p>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {!answers.usedFreeVersion && (
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 h-5 w-5 text-blue-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                            <p className="ml-2">Gain experience using free AI tools like Copilot</p>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {!answers.hasUseCase && (
+                                                        <div className="flex items-start">
+                                                            <div className="flex-shrink-0 h-5 w-5 text-blue-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </div>
+                                                            <p className="ml-2">Identify specific work tasks where a paid AI tool would add value</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        
+                        <button
+                            onClick={resetAssessment}
+                            className="w-full p-3 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                        >
+                            Start Over
+                        </button>
+                    </div>
+                );
+            };
+
+            return (
+                <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold text-blue-900">AI Tool Readiness Check</h2>
+                        <p className="text-gray-600">
+                            This quick assessment will help determine if you're ready to apply for a paid AI tool license (ChatGPT Pro or Claude Pro).
+                        </p>
+                    </div>
+                    
+                    <div className="p-6 border rounded-lg">
+                        {result ? renderResult() : renderQuestion()}
+                    </div>
+                    
+                    <div className="mt-4 text-sm text-gray-500">
+                        <p>This assessment helps determine your readiness for a paid AI tool. It is not the official application form.</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the component to the DOM
+        ReactDOM.render(
+            <AIReadinessPreAssessment />,
+            document.getElementById('ai-readiness-app')
+        );
+    </script>
+</body>
+</html>
